@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { useAPI } from "../../Hooks/UseAPI";
-import { User } from "../../Types/User";
+import { LoginToken } from "../../Types/Security/LoginToken";
 import { AuthContext } from "./AuthContext"
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
 
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<LoginToken | null>(null);
     const api = useAPI();
 
     //Executado no momento em que ele inicia a app
@@ -13,9 +13,10 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
         const validateToken = async () => {
              const storegeData = localStorage.getItem('AuthToken');
              if (storegeData) {
-                const data = await api.validateToken(storegeData);
-                if (data.user) {
-                    setUser(data.user);
+                var user = (JSON.parse(storegeData)) as LoginToken;
+                const data = await api.validateToken(user.Token);
+                if (data) {
+                    setUser(data);
                 }
              }
         }
@@ -25,27 +26,23 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     const LoginEntrar = async (Email: string, Password: string) => {
         const data = await api.loginEntrar(Email, Password);
 
-        if (data.user && data.token) {
-            setUser(data.user);
-            setToken(data.Token)
-            return true;
+        if (data.Usuario && data.Token) {
+            setUser(data);
+            setToken(data)
+            return data;
         }
-        return false;
+        return data;
     }
 
     const LoginSair = async () => {
-        await api.loginSair();
+        //await api.loginSair();
         setUser(null);
-        setToken('');
+        localStorage.removeItem('AuthToken');
     }
 
-    const setToken = (token: string) => {
-        localStorage.setItem('AuthToken', token);
+    const setToken = (token: LoginToken) => {
+        localStorage.setItem('AuthToken', JSON.stringify(token));
     }
-
-    // const getToken = () => {
-    //     localStorage.getItem('AuthToken');
-    // }
 
     return (
         <AuthContext.Provider value={{ user, LoginEntrar, LoginSair }}>

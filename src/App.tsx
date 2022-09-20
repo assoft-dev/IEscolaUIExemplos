@@ -5,6 +5,7 @@ import { Private } from './Page/Privado';
 import { RequireAuth } from './Contexts/Auth/RequireAuth';
 import { AuthContext } from './Contexts/Auth/AuthContext';
 import { useContext } from 'react';
+import { Login } from './Page/Login';
 
 function App() {
   const Auth = useContext(AuthContext);
@@ -16,20 +17,27 @@ function App() {
 
   return (
     <div className="App">
-      <header>
-        <h1> Site de Testes  </h1>
+      {<header>
+        <RequireAuth>
+          <div>
+            <h1> Site de Testes  </h1>
+            <nav>
+              <Link to="/">Home </Link>
+              <Link to="/Private">Private </Link>
+              {Auth.user && <button onClick={LoginSair}>Sair</button>}
+            </nav>
+          </div>
+           
+        </RequireAuth>
+        
 
-        <nav>
-          <Link to="/">Home </Link>
-          <Link to="/Private">Private </Link>
-          {Auth.user && <button onClick={LoginSair}>Sair</button>}
-        </nav>
-      </header>
+      </header>}
 
       <hr />
 
       <Routes>
-        <Route path='/' element={<Home />} />
+      <Route path='/' element={<Login />} />
+        <Route path='/Home' element={<Home />} />
         <Route path='/Private' element={<RequireAuth><Private /></RequireAuth>} />
       </Routes>
 

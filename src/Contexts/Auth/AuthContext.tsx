@@ -1,9 +1,9 @@
 import { createContext } from "react";
-import { User } from "../../Types/User";
+import { LoginToken } from "../../Types/Security/LoginToken";
 
-export type AuthContextType ={
-    user: User | null;
-    LoginEntrar: (Email: string, Password: string) => Promise<boolean>;
+export type AuthContextType = {
+    user: LoginToken | null;
+    LoginEntrar: (Email: string, Password: string) => Promise<LoginToken>;
     LoginSair: () => void;
 }
 
