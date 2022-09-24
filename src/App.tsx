@@ -10,7 +10,7 @@ import { Login } from './Page/Login';
 function App() {
   const Auth = useContext(AuthContext);
 
-  const LoginSair = async () =>{
+  const LoginSair = async () => {
     await Auth.LoginSair();
     window.location.href = window.location.href;
   }
@@ -18,26 +18,20 @@ function App() {
   return (
     <div className="App">
       {<header>
-        <RequireAuth>
+        {Auth.user &&
           <div>
             <h1> Site de Testes  </h1>
             <nav>
-              <Link to="/">Home </Link>
+              <Link to="/">Dashboard </Link>
               <Link to="/Private">Private </Link>
               {Auth.user && <button onClick={LoginSair}>Sair</button>}
             </nav>
-          </div>
-           
-        </RequireAuth>
-        
-
+          </div>}
       </header>}
 
-      <hr />
-
       <Routes>
-      <Route path='/' element={<Login />} />
-        <Route path='/Home' element={<Home />} />
+        {<Route path='/' element={<Login />} />}
+        <Route path='/Dashboard' element={<Home />} />
         <Route path='/Private' element={<RequireAuth><Private /></RequireAuth>} />
       </Routes>
 
