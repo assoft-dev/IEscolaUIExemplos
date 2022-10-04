@@ -11,14 +11,14 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     //Executado no momento em que ele inicia a app
     useEffect(() => {
         const validateToken = async () => {
-             const storegeData = localStorage.getItem('AuthToken');
-             if (storegeData) {
+            const storegeData = localStorage.getItem('AuthToken');
+            if (storegeData) {
                 var user = (JSON.parse(storegeData)) as LoginToken;
                 const data = await api.validateToken(user.Token);
                 if (data) {
                     setUser(data);
                 }
-             }
+            }
         }
         validateToken();
     }, [api])
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     const LoginSair = async () => {
         //await api.loginSair();
         setUser(null);
-        localStorage.removeItem('AuthToken');
+        localStorage.removeItem('AuthToken');     
     }
 
     const setToken = (token: LoginToken) => {
